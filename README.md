@@ -1,5 +1,5 @@
 ## Install
 
 ```
-npm install pro-query
+npm install pro-redux-query
 ```

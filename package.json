@@ -1,9 +1,9 @@
 {
-    "name": "pro-query",
+    "name": "pro-redux-query",
     "version": "0.0.1",
     "description": "Pro Query",
-    "main": "./dist/pro-query.js",
-    "types": "./dist/pro-query.d.ts",
+    "main": "./dist/pro-redux-query.js",
+    "types": "./dist/pro-redux-query.d.ts",
     "files": [
         "dist"
     ],
@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/phyntos/pro-query.git"
+        "url": "git+https://github.com/phyntos/pro-redux-query.git"
     },
     "keywords": [],
     "author": "Yeldos Bakytzhan",

@@ -4,7 +4,7 @@ import webpack from 'webpack';
 
 const config: webpack.Configuration = {
     target: 'web',
-    entry: './src/pro-query.ts',
+    entry: './src/pro-redux-query.ts',
     mode: 'production',
     module: {
         rules: [
@@ -20,7 +20,7 @@ const config: webpack.Configuration = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'pro-query.js',
+        filename: 'pro-redux-query.js',
         library: {
             name: 'ProQuery',
             type: 'umd',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProQueryProvider } from '../pro-query';
+import { ProQueryProvider } from '../pro-redux-query';
 import { store } from './store';
 import DevModule from './DevModule';
 

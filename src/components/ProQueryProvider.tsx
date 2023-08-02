@@ -1,7 +1,7 @@
 import { Action, AnyAction, Store } from '@reduxjs/toolkit';
 import React, { ReactNode, useCallback } from 'react';
 import { Provider, useSelector } from 'react-redux';
-import { selectBaseUrl, selectToken, setQueryData } from '../pro-query';
+import { selectBaseUrl, selectToken, setQueryData } from '../pro-redux-query';
 
 export type PropType = string | null | undefined;
 export type MaybePromiseProp<T extends PropType> = T | (() => T | Promise<T>);

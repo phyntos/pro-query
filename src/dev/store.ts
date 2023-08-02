@@ -1,5 +1,5 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
-import { getProQuery, ProQuerySlice } from '../pro-query';
+import { getProQuery, ProQuerySlice } from '../pro-redux-query';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const DevApi = createApi({
