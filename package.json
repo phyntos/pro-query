@@ -1,0 +1,47 @@
+{
+    "name": "pro-query",
+    "version": "0.0.0",
+    "description": "Pro Query",
+    "main": "./dist/pro-query.js",
+    "types": "./dist/pro-query.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
+        "prettier": "prettier --write \"src/**/*.{js,ts,jsx,tsx}\"",
+        "build": "webpack --config webpack.config.ts",
+        "prepublishOnly": "npm run prettier && npm run lint && npm version patch && git push && npm run build",
+        "start": "webpack serve --open --config webpack.dev.config.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/phyntos/pro-query.git"
+    },
+    "keywords": [],
+    "author": "Yeldos Bakytzhan",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^18.15.10",
+        "@types/react": "^17.0.62",
+        "@types/react-dom": "^17.0.20",
+        "@typescript-eslint/eslint-plugin": "^5.41.0",
+        "@typescript-eslint/parser": "^5.41.0",
+        "eslint": "^8.36.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "html-webpack-plugin": "^5.5.0",
+        "prettier": "^2.8.7",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "terser-webpack-plugin": "^5.3.7",
+        "ts-loader": "^9.4.2",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.8.4",
+        "webpack": "^5.76.3",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.13.1"
+    }
+}
