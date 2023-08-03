@@ -31,6 +31,7 @@ const config: webpack.Configuration = {
     externals: {
         react: 'react',
         'react-dom': 'react-dom',
+        'react-redux': 'react-redux',
     },
     optimization: {
         minimize: true,
