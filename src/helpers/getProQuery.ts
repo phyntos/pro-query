@@ -49,10 +49,9 @@ export type ResultNormalize<T> = (
 ) => QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>;
 
 const getProQuery = <T>({
-    commonArgs,
     resultNormalize,
-}: {
-    commonArgs?: Omit<CommonQueryArgs, 'getState'>;
+    ...commonArgs
+}: Omit<CommonQueryArgs, 'getState'> & {
     resultNormalize?: (
         result: QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>,
     ) => QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>;
