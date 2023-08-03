@@ -1,5 +1,5 @@
 import { Action, AnyAction, Store } from '@reduxjs/toolkit';
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { selectBaseUrl, selectToken, setQueryData } from '../pro-redux-query';
 
@@ -31,6 +31,8 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
         name: string;
     }[];
 }) => {
+    const [isQuerySet, setIsQuerySet] = useState(false);
+
     const setQueryDataAsync = useCallback(
         async ({
             name = 'Main',
@@ -48,13 +50,22 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
         [store],
     );
 
-    setQueryDataAsync({ baseUrl, token });
+    useEffect(() => {
+        setIsQuerySet(false);
+        const promise = setQueryDataAsync({ baseUrl, token });
 
-    extraQueries?.forEach((queryData) => {
-        setQueryDataAsync(queryData);
-    });
+        const extraPromises = extraQueries?.map((queryData) => {
+            return setQueryDataAsync(queryData);
+        });
 
-    return <Provider store={store}>{children}</Provider>;
+        Promise.all([promise, ...(extraPromises || [])]).finally(() => {
+            setIsQuerySet(true);
+        });
+    }, [setQueryDataAsync, baseUrl, token, extraQueries]);
+
+    if (isQuerySet) return <Provider store={store}>{children}</Provider>;
+
+    return null;
 };
 
 export const useToken = (name = 'Main') => {
