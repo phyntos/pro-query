@@ -28,6 +28,12 @@ export const DevModuleApi = DevApi.injectEndpoints({
                     responseHandler: 'text',
                 }),
             }),
+            getContracts: build.query<any, void>({
+                query: () => ({
+                    url: 'contractAgreements/requests',
+                    params: { page: 1, size: 10 },
+                }),
+            }),
         };
     },
 });
@@ -51,5 +57,5 @@ export const DevModuleIrsApi = DevIrsApi.injectEndpoints({
     },
 });
 
-export const { useLoginMutation } = DevModuleApi;
+export const { useLoginMutation, useGetContractsQuery } = DevModuleApi;
 export const { useLoginIrsMutation } = DevModuleIrsApi;

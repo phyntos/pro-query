@@ -32,6 +32,7 @@ const config: webpack.Configuration = {
         react: 'react',
         'react-dom': 'react-dom',
         'react-redux': 'react-redux',
+        '@reduxjs/toolkit': '@reduxjs/toolkit',
     },
     optimization: {
         minimize: true,

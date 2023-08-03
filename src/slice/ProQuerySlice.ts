@@ -24,6 +24,18 @@ const ProQuerySlice = createSlice<
                 payload: ProQueryDataType;
             },
         ) => void;
+        setQueryToken: (
+            state: ProQueryStateType,
+            action: {
+                payload: Pick<ProQueryDataType, 'name' | 'token'>;
+            },
+        ) => void;
+        setQueryBaseUrl: (
+            state: ProQueryStateType,
+            action: {
+                payload: Pick<ProQueryDataType, 'name' | 'baseUrl'>;
+            },
+        ) => void;
     },
     'ProQuery'
 >({
@@ -36,6 +48,18 @@ const ProQuerySlice = createSlice<
                 state.dataList.push(payload);
             } else {
                 state.dataList[dataIndex] = payload;
+            }
+        },
+        setQueryToken: (state, { payload }) => {
+            const dataIndex = state.dataList.findIndex((x) => x.name === payload.name);
+            if (dataIndex !== -1) {
+                state.dataList[dataIndex].token = payload.token;
+            }
+        },
+        setQueryBaseUrl: (state, { payload }) => {
+            const dataIndex = state.dataList.findIndex((x) => x.name === payload.name);
+            if (dataIndex !== -1) {
+                state.dataList[dataIndex].baseUrl = payload.baseUrl;
             }
         },
     },
@@ -56,6 +80,6 @@ export const selectBaseUrl =
     (state: ProQueryState) =>
         state.ProQuery.dataList.find((x) => x.name === name)?.baseUrl;
 
-export const { setQueryData } = ProQuerySlice.actions;
+export const { setQueryData, setQueryBaseUrl, setQueryToken } = ProQuerySlice.actions;
 
 export default ProQuerySlice.reducer;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProQueryProvider } from '../pro-redux-query';
+import DevMain from './DevMain';
 import { store } from './store';
-import DevModule from './DevModule';
 
 const DevApp = () => {
     return (
@@ -17,7 +17,7 @@ const DevApp = () => {
                 },
             ]}
         >
-            <DevModule />
+            <DevMain />
         </ProQueryProvider>
     );
 };
