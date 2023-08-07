@@ -12,7 +12,7 @@ export const DevApi = createApi({
 export const DevIrsApi = createApi({
     reducerPath: 'DevIrsApi',
     tagTypes: [],
-    baseQuery: getProQuery({ commonArgs: { name: 'Irs' } }),
+    baseQuery: getProQuery({ name: 'Irs' }),
     endpoints: () => ({}),
 });
 

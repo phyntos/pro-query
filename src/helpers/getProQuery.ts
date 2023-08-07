@@ -2,8 +2,8 @@ import { BaseQueryFn, QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQ
 import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { ProQueryState, selectBaseUrl, selectToken } from '../slice/ProQuerySlice';
 import { MaybePromiseProp, PropType } from '../components/ProQueryProvider';
+import { ProQueryState, selectBaseUrl, selectToken } from '../slice/ProQuerySlice';
 
 export type CommonQueryArgs = {
     name?: string;
@@ -48,14 +48,13 @@ export type ResultNormalize<T> = (
     result: QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>,
 ) => QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>;
 
-const getProQuery = <T>({
-    resultNormalize,
-    ...commonArgs
-}: Omit<CommonQueryArgs, 'getState'> & {
-    resultNormalize?: (
-        result: QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>,
-    ) => QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta>;
-}): BaseQueryFn<string | FetchArgs, T, FetchBaseQueryError> => {
+const getProQuery = <T>(
+    params: Omit<CommonQueryArgs, 'getState'> & {
+        resultNormalize?: ResultNormalize<T>;
+    } = {},
+): BaseQueryFn<string | FetchArgs, T, FetchBaseQueryError> => {
+    const { resultNormalize, ...commonArgs } = params;
+
     return async (args, api, extraOptions) => {
         const commonQuery = await getCommonQuery({ ...commonArgs, getState: api.getState });
 
