@@ -14,23 +14,27 @@ const getProp = async (prop?: MaybePromiseProp<PropType>): Promise<PropType> => 
     return prop;
 };
 
+export type ProQueryProviderExtraQuery = {
+    token?: MaybePromiseProp<PropType>;
+    baseUrl?: MaybePromiseProp<PropType>;
+    name: string;
+};
+
+export type ProQueryProviderProps<A extends Action = AnyAction, S = unknown> = {
+    store: Store<S, A>;
+    children: ReactNode;
+    token?: MaybePromiseProp<PropType>;
+    baseUrl?: MaybePromiseProp<PropType>;
+    extraQueries?: ProQueryProviderExtraQuery[];
+};
+
 const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
     store,
     children,
     token,
     baseUrl,
     extraQueries,
-}: {
-    store: Store<S, A>;
-    children: ReactNode;
-    token?: MaybePromiseProp<PropType>;
-    baseUrl?: MaybePromiseProp<PropType>;
-    extraQueries?: {
-        token?: MaybePromiseProp<PropType>;
-        baseUrl?: MaybePromiseProp<PropType>;
-        name: string;
-    }[];
-}) => {
+}: ProQueryProviderProps<A, S>) => {
     const [isQuerySet, setIsQuerySet] = useState(false);
 
     const setQueryDataAsync = useCallback(
