@@ -1,4 +1,4 @@
-import ProQueryProvider, { useToken, useBaseUrl } from './components/ProQueryProvider';
+import ProQueryProvider, { useQueryToken, useQueryBaseUrl } from './components/ProQueryProvider';
 import getProQuery from './helpers/getProQuery';
 import ProQuerySlice, {
     selectQueryBaseUrl,
@@ -16,7 +16,7 @@ export {
     setQueryBaseUrl,
     setQueryToken,
     getProQuery,
-    useToken,
-    useBaseUrl,
+    useQueryToken,
+    useQueryBaseUrl,
     ProQueryProvider,
 };

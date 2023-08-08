@@ -72,13 +72,13 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
     return null;
 };
 
-export const useToken = (name = 'Main') => {
+export const useQueryToken = (name = 'Main') => {
     const token = useSelector(selectQueryToken(name));
 
     return token;
 };
 
-export const useBaseUrl = (name = 'Main') => {
+export const useQueryBaseUrl = (name = 'Main') => {
     const baseUrl = useSelector(selectQueryBaseUrl(name));
 
     return baseUrl;
