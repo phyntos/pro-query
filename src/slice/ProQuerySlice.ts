@@ -66,16 +66,12 @@ const ProQuerySlice = createSlice<
 });
 
 export type ProQueryState = { ProQuery: ProQueryStateType };
-export type ProActionType = 'ProQuery/setToken' | 'ProQuery/setBaseUrl';
-export type ProQueryAction =
-    | { payload: string | undefined; type: 'ProQuery/setToken' }
-    | { payload: string | undefined; type: 'ProQuery/setBaseUrl' };
 
-export const selectToken =
+export const selectQueryToken =
     (name = 'Main') =>
     (state: ProQueryState) =>
         state.ProQuery.dataList.find((x) => x.name === name)?.token;
-export const selectBaseUrl =
+export const selectQueryBaseUrl =
     (name = 'Main') =>
     (state: ProQueryState) =>
         state.ProQuery.dataList.find((x) => x.name === name)?.baseUrl;

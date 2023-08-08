@@ -3,7 +3,7 @@ import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { MaybePromiseProp, PropType } from '../components/ProQueryProvider';
-import { ProQueryState, selectBaseUrl, selectToken } from '../slice/ProQuerySlice';
+import { ProQueryState, selectQueryBaseUrl, selectQueryToken } from '../slice/ProQuerySlice';
 
 export type CommonQueryArgs = {
     name?: string;
@@ -17,7 +17,7 @@ export const getCommonQuery = async ({ baseUrl, token, prepareHeaders, getState,
     if (!baseUrl) {
         if (getState) {
             const state = getState() as ProQueryState;
-            baseUrl = selectBaseUrl(name)(state);
+            baseUrl = selectQueryBaseUrl(name)(state);
         }
     } else {
         baseUrl = typeof baseUrl === 'function' ? await baseUrl() : baseUrl;
@@ -26,7 +26,7 @@ export const getCommonQuery = async ({ baseUrl, token, prepareHeaders, getState,
     if (!token) {
         if (getState) {
             const state = getState() as ProQueryState;
-            token = selectToken(name)(state);
+            token = selectQueryToken(name)(state);
         }
     } else {
         token = typeof token === 'function' ? await token() : token;

@@ -1,7 +1,7 @@
 import { Action, AnyAction, Store } from '@reduxjs/toolkit';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Provider, useSelector } from 'react-redux';
-import { selectBaseUrl, selectToken, setQueryData } from '../pro-redux-query';
+import { selectQueryBaseUrl, selectQueryToken, setQueryData } from '../pro-redux-query';
 
 export type PropType = string | null | undefined;
 export type MaybePromiseProp<T extends PropType> = T | (() => T | Promise<T>);
@@ -73,13 +73,13 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
 };
 
 export const useToken = (name = 'Main') => {
-    const token = useSelector(selectToken(name));
+    const token = useSelector(selectQueryToken(name));
 
     return token;
 };
 
 export const useBaseUrl = (name = 'Main') => {
-    const baseUrl = useSelector(selectBaseUrl(name));
+    const baseUrl = useSelector(selectQueryBaseUrl(name));
 
     return baseUrl;
 };
