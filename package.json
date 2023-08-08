@@ -1,6 +1,6 @@
 {
     "name": "pro-redux-query",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "description": "Pro Query",
     "main": "./dist/pro-redux-query.js",
     "types": "./dist/pro-redux-query.d.ts",
