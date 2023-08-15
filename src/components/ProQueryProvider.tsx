@@ -2,13 +2,15 @@ import { Action, AnyAction, Store } from '@reduxjs/toolkit';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { selectQueryBaseUrl, selectQueryToken, setQueryData } from '../pro-redux-query';
+import { HeaderType } from '../slice/ProQuerySlice';
 
 export type PropType = string | null | undefined;
-export type MaybePromiseProp<T extends PropType> = T | (() => T | Promise<T>);
+export type MaybePromiseProp<T> = T | (() => T | Promise<T>);
 
-const getProp = async (prop?: MaybePromiseProp<PropType>): Promise<PropType> => {
+export const getProp = async <T,>(prop?: MaybePromiseProp<T>): Promise<T | undefined> => {
     if (!prop) return undefined;
     if (typeof prop === 'function') {
+        /* @ts-ignore */
         return await prop();
     }
     return prop;
@@ -17,6 +19,7 @@ const getProp = async (prop?: MaybePromiseProp<PropType>): Promise<PropType> => 
 export type ProQueryProviderExtraQuery = {
     token?: MaybePromiseProp<PropType>;
     baseUrl?: MaybePromiseProp<PropType>;
+    prepareHeaders?: MaybePromiseProp<HeaderType[]>;
     name: string;
 };
 
@@ -25,6 +28,7 @@ export type ProQueryProviderProps<A extends Action = AnyAction, S = unknown> = {
     children: ReactNode;
     token?: MaybePromiseProp<PropType>;
     baseUrl?: MaybePromiseProp<PropType>;
+    prepareHeaders?: MaybePromiseProp<HeaderType[]>;
     extraQueries?: ProQueryProviderExtraQuery[];
 };
 
@@ -33,6 +37,7 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
     children,
     token,
     baseUrl,
+    prepareHeaders,
     extraQueries,
 }: ProQueryProviderProps<A, S>) => {
     const [isQuerySet, setIsQuerySet] = useState(false);
@@ -42,21 +47,34 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
             name = 'Main',
             token,
             baseUrl,
+            prepareHeaders,
         }: {
             name?: string;
             token?: MaybePromiseProp<PropType>;
             baseUrl?: MaybePromiseProp<PropType>;
+            prepareHeaders?: MaybePromiseProp<HeaderType[]>;
         }) => {
-            const [propBaseUrl, propToken] = await Promise.all([getProp(baseUrl), getProp(token)]);
+            const [propBaseUrl, propToken, propPrepareHeaders] = await Promise.all([
+                getProp(baseUrl),
+                getProp(token),
+                getProp(prepareHeaders),
+            ]);
 
-            store.dispatch(setQueryData({ baseUrl: propBaseUrl, name, token: propToken }) as any as A);
+            store.dispatch(
+                setQueryData({
+                    baseUrl: propBaseUrl,
+                    name,
+                    token: propToken,
+                    prepareHeaders: propPrepareHeaders,
+                }) as any as A,
+            );
         },
         [store],
     );
 
     useEffect(() => {
         setIsQuerySet(false);
-        const promise = setQueryDataAsync({ baseUrl, token });
+        const promise = setQueryDataAsync({ baseUrl, token, prepareHeaders });
 
         const extraPromises = extraQueries?.map((queryData) => {
             return setQueryDataAsync(queryData);
@@ -65,7 +83,7 @@ const ProQueryProvider = <A extends Action = AnyAction, S = unknown>({
         Promise.all([promise, ...(extraPromises || [])]).finally(() => {
             setIsQuerySet(true);
         });
-    }, [setQueryDataAsync, baseUrl, token, extraQueries]);
+    }, [setQueryDataAsync, baseUrl, token, prepareHeaders, extraQueries]);
 
     if (isQuerySet) return <Provider store={store}>{children}</Provider>;
 

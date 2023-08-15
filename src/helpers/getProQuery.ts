@@ -1,42 +1,65 @@
 import { BaseQueryFn, QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
-import { FetchBaseQueryArgs } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { MaybePromiseProp, PropType } from '../components/ProQueryProvider';
-import { ProQueryState, selectQueryBaseUrl, selectQueryToken } from '../slice/ProQuerySlice';
+import { MaybePromiseProp, PropType, getProp } from '../components/ProQueryProvider';
+import {
+    HeaderType,
+    ProQueryState,
+    selectQueryBaseUrl,
+    selectQueryPrepareHeaders,
+    selectQueryToken,
+} from '../slice/ProQuerySlice';
 
 export type CommonQueryArgs = {
     name?: string;
     baseUrl?: MaybePromiseProp<PropType>;
     token?: MaybePromiseProp<PropType>;
-    prepareHeaders?: FetchBaseQueryArgs['prepareHeaders'];
+    prepareHeaders?: MaybePromiseProp<HeaderType[]>;
     getState: () => unknown;
 };
 
 export const getCommonQuery = async ({ baseUrl, token, prepareHeaders, getState, name = 'Main' }: CommonQueryArgs) => {
+    let preparedBaseUrl: PropType;
+    let preparedToken: PropType;
+    let preparedPrepareHeaders: undefined | HeaderType[] = [];
+
     if (!baseUrl) {
         if (getState) {
             const state = getState() as ProQueryState;
-            baseUrl = selectQueryBaseUrl(name)(state);
+            preparedBaseUrl = selectQueryBaseUrl(name)(state);
         }
     } else {
-        baseUrl = typeof baseUrl === 'function' ? await baseUrl() : baseUrl;
+        preparedBaseUrl = await getProp(baseUrl);
     }
 
     if (!token) {
         if (getState) {
             const state = getState() as ProQueryState;
-            token = selectQueryToken(name)(state);
+            preparedToken = selectQueryToken(name)(state);
         }
     } else {
-        token = typeof token === 'function' ? await token() : token;
+        preparedToken = await getProp(token);
+    }
+
+    if (!prepareHeaders) {
+        if (getState) {
+            const state = getState() as ProQueryState;
+            preparedPrepareHeaders = selectQueryPrepareHeaders(name)(state);
+        }
+    } else {
+        preparedPrepareHeaders = await getProp(prepareHeaders);
     }
 
     return fetchBaseQuery({
-        baseUrl: baseUrl || undefined,
-        prepareHeaders: async (headers, api) => {
-            if (token) headers.set('Authorization', `Bearer ${token}`);
-            return prepareHeaders ? await prepareHeaders(headers, api) : headers;
+        baseUrl: preparedBaseUrl || undefined,
+        prepareHeaders: async (headers) => {
+            if (preparedToken) headers.set('Authorization', `Bearer ${preparedToken}`);
+            if (preparedPrepareHeaders?.length) {
+                preparedPrepareHeaders.forEach(({ key, value }) => {
+                    headers.set(key, value);
+                });
+            }
+            return headers;
         },
         paramsSerializer: (params) => {
             return qs.stringify(params, { arrayFormat: 'repeat' });

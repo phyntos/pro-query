@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { setQueryToken } from '../slice/ProQuerySlice';
+import { setQueryPrepareHeaders, setQueryToken } from '../slice/ProQuerySlice';
 import { useLoginIrsMutation, useLoginMutation } from './DevModuleApi';
 import { useAppDispatch } from './hooks';
 
@@ -32,6 +32,14 @@ const DevAuth = () => {
                         .then((token) => {
                             dispatch(setQueryToken({ name: 'Main', token }));
                             sessionStorage.setItem('token', token);
+                        })
+                        .catch(() => {
+                            dispatch(
+                                setQueryPrepareHeaders({
+                                    name: 'Main',
+                                    prepareHeaders: [{ key: 'lang', value: 'kz' }],
+                                }),
+                            );
                         });
                 }}
             >

@@ -9,6 +9,7 @@ const DevApp = () => {
             store={store}
             baseUrl='https:/localhost:5001/api/'
             token={() => sessionStorage.getItem('token')}
+            prepareHeaders={[{ key: 'lang', value: 'ru' }]}
             extraQueries={[
                 {
                     name: 'Irs',
